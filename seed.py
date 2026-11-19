@@ -9,7 +9,7 @@ with sqlite3.connect('my_database.db') as conn:
 
     c.execute('PRAGMA foreign_keys = ON')
 
-    c.execute('DELETE FROM task')
+    c.execute('DELETE FROM tasks')
     c.execute('DELETE FROM users')
     c.execute('DELETE FROM status')
 
@@ -24,7 +24,7 @@ with sqlite3.connect('my_database.db') as conn:
     for _ in range(20):
         fullname = fake.name()
         email = fake.unique.email()
-        c.execute('INSERT INTO users (name, email) VALUES (?, ?)', (fullname, email))
+        c.execute('INSERT INTO users (fullname, email) VALUES (?, ?)', (fullname, email))
 
     c.execute('SELECT id FROM users')
     users = [row[0] for row in c.fetchall()]
@@ -41,5 +41,5 @@ with sqlite3.connect('my_database.db') as conn:
        status_id = random.choice(status_ids)
 
        c.execute('''
-           INSERT INTO task (title, description, user_id, status_id) VALUES (?, ?, ?, ?)
+           INSERT INTO tasks (title, description, user_id, status_id) VALUES (?, ?, ?, ?)
        ''', (title, description, user_id, status_id))
