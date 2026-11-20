@@ -16,7 +16,7 @@ with sqlite3.connect('my_database.db') as conn:
     c.executemany('''
         INSERT INTO status (name) VALUES (?)
     ''',
-     [('New',), ('In Progress',), ('Completed',)])
+     [('new',), ('in progress',), ('completed',)])
 
     c.execute('SELECT id FROM status')
     status_ids = [row[0] for row in c.fetchall()]
@@ -27,19 +27,22 @@ with sqlite3.connect('my_database.db') as conn:
         c.execute('INSERT INTO users (fullname, email) VALUES (?, ?)', (fullname, email))
 
     c.execute('SELECT id FROM users')
-    users = [row[0] for row in c.fetchall()]
+    users_ids = [row[0] for row in c.fetchall()]
+    active_user_ids = users_ids[:-3] 
 
     for i in range(100):
-       title = fake.sentence(nb_words=4)
+        title = fake.sentence(nb_words=4)
 
-       if i % 5 == 0:
-           description = None
-       else:
-           description = fake.text()
+        if i % 5 == 0:
+            description = None
+        else:
+            description = fake.text()
 
-       user_id = random.choice(users)
-       status_id = random.choice(status_ids)
+        user_id = random.choice(active_user_ids)
+        status_id = random.choice(status_ids)
 
-       c.execute('''
-           INSERT INTO tasks (title, description, user_id, status_id) VALUES (?, ?, ?, ?)
-       ''', (title, description, user_id, status_id))
+        c.execute('''
+            INSERT INTO tasks (title, description, user_id, status_id) VALUES (?, ?, ?, ?)
+        ''', (title, description, user_id, status_id))
+
+conn.close()
