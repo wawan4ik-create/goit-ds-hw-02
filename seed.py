@@ -12,6 +12,7 @@ with sqlite3.connect('my_database.db') as conn:
     c.execute('DELETE FROM tasks')
     c.execute('DELETE FROM users')
     c.execute('DELETE FROM status')
+    c.execute("DELETE FROM sqlite_sequence WHERE name IN ('tasks', 'users', 'status')")
 
     c.executemany('''
         INSERT INTO status (name) VALUES (?)
